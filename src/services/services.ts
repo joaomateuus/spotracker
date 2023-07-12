@@ -41,3 +41,22 @@ export async function getUserProfile() {
         errors: errors
     }
 }
+
+export async function recentlyPlayedTracks() {
+    const response = await httpClient.get("https://api.spotify.com/v1/me/player/recently-played");
+
+    let errors = null;
+
+    if(!response.data){
+        errors = {
+            status: response.status,
+            message: response.statusText
+        }
+    }
+
+    return{
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        data: response.data.items,
+        errors: errors
+    }
+}

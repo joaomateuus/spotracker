@@ -1,0 +1,13 @@
+@media (min-width: 0px) and (max-width: 480px) {
+    #top-tracks-container{
+       
+    }
+
+    #track-details{
+        width: 50vw;
+    }
+
+    #track-details span{
+        font-size: 1.2rem;
+    }
+}
