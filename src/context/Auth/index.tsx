@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import React, { createContext, useState  } from "react";
+import React, { createContext, useCallback, useState  } from "react";
 import { httpClient } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +10,8 @@ interface AuthContextProps {
 
 interface AuthContextData {
     getAccessToken: () => void;
+    logout: () => void;
+    isUserLogged: () => boolean;
     token: string | null;
 }
 
@@ -18,7 +21,7 @@ const AuthProvider: React.FC<AuthContextProps> = ({children}) => {
     const [token, setToken] = useState<string | null>(null);
     const navigate = useNavigate();
 
-    const getAccessToken = () => {
+    const getAccessToken = useCallback( () => {
         const token = window.location.href.split("#")[1].split("&")[0].split("=")[1];
 
         if(!token) {
@@ -30,10 +33,19 @@ const AuthProvider: React.FC<AuthContextProps> = ({children}) => {
 
         httpClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         setToken(token);
+    }, [])
+
+    const logout = () => {
+        setToken(null);
+        navigate("/");
+    }
+
+    const isUserLogged = () => {
+        return !!token;
     }
     
     return(
-        <AuthContext.Provider value={{ getAccessToken, token}}>
+        <AuthContext.Provider value={{ getAccessToken, token, logout, isUserLogged}}>
             {children}
         </AuthContext.Provider>
     )
