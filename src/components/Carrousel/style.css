@@ -1,0 +1,8 @@
+#album-wrapper:-webkit-scrollbar {
+    display: none;
+}
+
+#album-wrapper {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}

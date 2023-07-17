@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -6,15 +7,20 @@
 import {  useCallback, useEffect, useState  } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/Auth';
-import { getUserProfile, recentlyPlayedTracks } from '../../services/services';
+import { getTopThings, getUserProfile, recentlyPlayedTracks } from '../../services/services';
 import { Navbar } from '../../components/Navbar';
 import { SpotifyTrack } from '../../interfaces/Track';
+import 'swiper/css';
 import './styles.css';
+import { ExternalUrls, Followers } from '../../interfaces/TopArtists';
+import { Carrousel } from '../../components/Carrousel';
 
 export const Dashboard: React.FC = () => {
     const { getAccessToken } = useContext(AuthContext);
     const [user, setUser] = useState<User | null>(null);
     const [recentTracks, setRecentTracks] = useState<RecentPlayedTracks[] | null>(null);
+    const [topArtists, setTopArtists] = useState<Artist[] | null>(null);
+
 
     interface Images {
         url: string;
@@ -26,6 +32,19 @@ export const Dashboard: React.FC = () => {
         display_name: string;
         images: Images[];
     }
+
+    interface Artist {
+        external_urls: ExternalUrls;
+        followers: Followers;
+        genres: string[];
+        href: string;
+        id: string;
+        images: Images[];
+        name: string;
+        popularity: number;
+        type: string;
+        uri: string;
+      }
 
     interface RecentPlayedTracks{
         track: SpotifyTrack;
@@ -56,10 +75,18 @@ export const Dashboard: React.FC = () => {
         }
     }, []);
 
+    const fetchTopArtists = useCallback(async () => {
+        const { data, errors } = await getTopThings("artists");
+        if(!errors){
+            console.log("Artistasss", data);
+            setTopArtists(data);
+        }
+    }, []);
+
     
-    const tracks = recentTracks?.map((track) => {
+    const tracks = recentTracks?.map((track, index) => {
         return(
-            <div className='flex items-start justify-start w-full h-fit p-6 border-b border-white' id='top-tracks-container'>
+            <div className='flex items-start justify-start w-full h-fit p-6 border-b border-white' id='top-tracks-container' key={index}>
                 <img src={track.track.album.images[2].url} alt="" />
                 <div className='flex items-start justify-between h-fit w-4/5 ml-6'>
                     <div className='flex flex-col items-start justify-between h-fit w-fit' id='track-details'>
@@ -72,12 +99,17 @@ export const Dashboard: React.FC = () => {
         )
     });
 
+
+
     useEffect(() => {
         getAccessToken();
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         fetchData();
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         fetchTracks();
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        fetchTopArtists();
+
     }, []);
 
     return(
@@ -93,6 +125,9 @@ export const Dashboard: React.FC = () => {
                             <span className='text-3xl text-white font-bold ml-2 mt-2'>{user?.display_name}</span>
                         </div>
                     </div>
+                </div>
+                <div className='flex flex-col items-center justify-center w-full h-96 p-6 bg-black'>
+                    <Carrousel topArtists={topArtists as Artist[]}/>
                 </div>
                 <div className='flex flex-col items-center justify-center w-full h-fit p-6 bg-black'>
                     <div className='flex flex-col items-start justify-center h-fit w-4/5'>
