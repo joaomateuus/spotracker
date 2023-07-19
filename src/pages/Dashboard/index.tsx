@@ -10,7 +10,6 @@ import { AuthContext } from '../../context/Auth';
 import { getTopThings, getUserProfile, recentlyPlayedTracks } from '../../services/services';
 import { Navbar } from '../../components/Navbar';
 import { SpotifyTrack } from '../../interfaces/Track';
-import 'swiper/css';
 import './styles.css';
 import { ExternalUrls, Followers } from '../../interfaces/TopArtists';
 import { Carrousel } from '../../components/Carrousel';
@@ -114,20 +113,21 @@ export const Dashboard: React.FC = () => {
 
     return(
         <>
-            <Navbar />
+            <Navbar user_image={ user ? user.images[1].url : ""} />
             <div className='flex flex-col items-center justify-start w-full h-screen bg-black'>
-                <div className='flex items-start justify-start w-full h-2/5 bg-spotify-green' id='profile-container'>
-                    <div className='flex items-start justify-start w-full h-fit p-6'>
-                        <div>
-                            <img className='max-w-xl rounded-full' src={ user ? user.images[1].url : ""} alt="" />
-                        </div>
-                        <div className='flex flex-col items-start justify-center w-fit h-fit p-4'>
-                            <span className='text-3xl text-white font-bold ml-2 mt-2'>{user?.display_name}</span>
-                        </div>
+                <div className='flex items-start justify-center h-96 p-4 w-full bg-black mb-4'>
+                    <div className='flex flex-col items-start justify-center w-4/5'>
+                        <h1 className='text-white text-4xl'>Top Artists</h1>
+                        <Carrousel topArtists={topArtists as Artist[]}/>
                     </div>
+                   <span className='text-white'>Ver mais</span>
                 </div>
-                <div className='flex flex-col items-center justify-center w-full h-96 p-6 bg-black'>
-                    <Carrousel topArtists={topArtists as Artist[]}/>
+                <div className='flex items-start justify-center h-96 p-4 w-full bg-black mb-4'>
+                    <div className='flex flex-col items-start justify-center w-4/5'>
+                        <h1 className='text-white text-4xl'>Top Artists</h1>
+                        <Carrousel topArtists={topArtists as Artist[]}/>
+                    </div>
+                   <span className='text-white'>Ver mais</span>
                 </div>
                 <div className='flex flex-col items-center justify-center w-full h-fit p-6 bg-black'>
                     <div className='flex flex-col items-start justify-center h-fit w-4/5'>
