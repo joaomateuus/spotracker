@@ -1,15 +1,18 @@
 import { useContext } from "react";
 import logo from "../../assets/logo.png";
 import { AuthContext } from "../../context/Auth";
-
-interface NavbarProps{
-  user_image: string;
-}
+// import { useContext } from "react";
+// import { AuthContext } from "../../context/Auth";
 
 
-export const Navbar = ({user_image}: NavbarProps) => {
-  const { isUserLogged, logout } = useContext(AuthContext);  
-  
+
+// interface NavbarProps{
+//   user_image: string;
+// }
+
+
+export const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);  
   
   return (
       <>
@@ -19,7 +22,7 @@ export const Navbar = ({user_image}: NavbarProps) => {
               <span className="text-3xl font-thin">Spotracker</span>
             </div>
             {
-              isUserLogged() 
+              user
               ?
               <div className="flex items-center justify-between p-4 lg:justify-center w-full lg:w-1/2">
                 <ul id="" className="flex justify-evenly w-4/5 items-center lg:w-2/4">
@@ -32,7 +35,7 @@ export const Navbar = ({user_image}: NavbarProps) => {
                   </li>
                 </ul>
                 <div>
-                  <img className="h-16 w-16 rounded-full" src={user_image} alt="" />
+                  <img className="h-16 w-16 rounded-full" src={user?.images[1].url} alt="" />
                 </div>
               </div>
               : <button className="px-12 py-3 rounded-lg bg-black text-white text-xl">Log in</button>
