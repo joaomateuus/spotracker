@@ -1,7 +1,8 @@
-import { Route, Routes } from "react-router-dom"
-// import { Login } from "../pages/Login"
-import { Home } from "../pages/Home"
-import { Dashboard } from "../pages/Dashboard"
+import { Route, Routes } from "react-router-dom";
+import { Home } from "../pages/Home";
+import { Dashboard } from "../pages/Dashboard";
+import { TopArtists } from "../pages/TopArtists";
+import { TopTracks } from "../components/TracksGrid";
 
 export const AppRoutes: React.FC = () => {
     return(
@@ -9,6 +10,8 @@ export const AppRoutes: React.FC = () => {
             {/* <Route path="/login" element={<Login />} /> */}
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/top_artists" element={<TopArtists />} />
+            <Route path="/top_tracks" element={<TopTracks />} />
         </Routes>
     )
 }

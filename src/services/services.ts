@@ -61,8 +61,12 @@ export async function recentlyPlayedTracks() {
     }
 }
 
-export async function getTopThings(thing: string) {
-    const response = await httpClient.get(`https://api.spotify.com/v1/me/top/${thing}`);
+export async function getTopThings(thing: string, filter?: string) {
+    const processUrlForFilter = filter
+        ? `https://api.spotify.com/v1/me/top/${thing}?time_range=${filter}`
+        : `https://api.spotify.com/v1/me/top/${thing}`	
+    
+    const response = await httpClient.get(processUrlForFilter);
 
     let errors = null;
 

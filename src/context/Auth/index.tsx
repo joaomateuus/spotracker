@@ -39,6 +39,11 @@ const AuthProvider: React.FC<AuthContextProps> = ({children}) => {
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<User | null>(null);
 
+    // useEffect(() => {
+    //   console.log("Log do context", user);
+    // }, [])
+    
+
     const navigate = useNavigate();
 
     const getAccessToken = useCallback( () => {
@@ -60,7 +65,7 @@ const AuthProvider: React.FC<AuthContextProps> = ({children}) => {
     const fetchData = useCallback(async () => {
         const { data, errors } = await getUserProfile();
         if(!errors){
-            console.log(data);
+            // console.log(data);
             setUser(data as User);
         }
     }, []);

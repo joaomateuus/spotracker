@@ -51,6 +51,8 @@ interface Track {
 interface TopThingsContextData {
    topArtists: Artist[] | null;
    topTracks: Track[] | null;
+   fetchTopArtists: (filter: string) => Promise<void>;
+   fetchTopTracks: (filter: string) => Promise<void>;
 }
 
 const TopThingsContext = createContext({} as TopThingsContextData);
@@ -65,30 +67,30 @@ const TopThingsProvider: React.FC<TopThingsContextProps> = ({children}) => {
     useEffect(()=> {
         if(!topArtists && token) {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            fetchTopArtists();
+            fetchTopArtists('long_term');
         }
 
         if(!topTracks && token) {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            fetchTopTracks();
+            fetchTopTracks('long_term');
         }
         
     })
 
-    const fetchTopArtists = useCallback(async () => {
+    const fetchTopArtists = useCallback(async (filter: string) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { data, errors } = await getTopThings("artists");
+        const { data, errors } = await getTopThings("artists", filter);
         if(!errors){
-            console.log("Artistasss", data);
+            // console.log("Artistasss", data);
             setTopArtists(data as Artist[]);
         }
     }, []);
 
-    const fetchTopTracks = useCallback(async () => {
+    const fetchTopTracks = useCallback(async (filter: string) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { data, errors } = await getTopThings("tracks");
+        const { data, errors } = await getTopThings("tracks", filter);
         if(!errors){
-            console.log("Tracks", data);
+            // console.log("Tracks", data);
             setTopTracks(data as Track[]);
         }
     }, []);
@@ -96,7 +98,7 @@ const TopThingsProvider: React.FC<TopThingsContextProps> = ({children}) => {
 
     
     return(
-        <TopThingsContext.Provider value={{ topArtists, topTracks }}>
+        <TopThingsContext.Provider value={{ topArtists, topTracks, fetchTopArtists, fetchTopTracks }}>
             {children}
         </TopThingsContext.Provider>
     )

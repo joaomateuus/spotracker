@@ -1,0 +1,7 @@
+#active-filter{
+    background-color: #1DB954;
+}
+
+#inactive-filter:hover {
+    background-color: rgb(88, 88, 88);
+}
